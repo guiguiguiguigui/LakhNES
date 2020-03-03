@@ -159,10 +159,10 @@ def emit_nesmdb_midi_examples(
   # Emit midi files
   for i, perm in enumerate(instrument_perms):
     # Create MIDI instruments
-    p1_prog = pretty_midi.instrument_name_to_program('Lead1')
-    p2_prog = pretty_midi.instrument_name_to_program('Lead2')
-    tr_prog = pretty_midi.instrument_name_to_program('lead3')
-    no_prog = pretty_midi.instrument_name_to_program('Drum')
+    p1_prog = pretty_midi.instrument_name_to_program('Lead 1 (square)')
+    p2_prog = pretty_midi.instrument_name_to_program('Lead 2 (sawtooth)')
+    tr_prog = pretty_midi.instrument_name_to_program('Synth Bass 1')
+    no_prog = pretty_midi.instrument_name_to_program('Breath Noise')
     p1 = pretty_midi.Instrument(program=p1_prog, name='p1', is_drum=False)
     p2 = pretty_midi.Instrument(program=p2_prog, name='p2', is_drum=False)
     tr = pretty_midi.Instrument(program=tr_prog, name='tr', is_drum=False)
