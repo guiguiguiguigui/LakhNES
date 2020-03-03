@@ -101,8 +101,8 @@ def emit_nesmdb_midi_examples(
     for ins in drums:
       ins.notes = sorted(ins.notes, key=lambda x: x.start)
 
-  # Filter out polyphonic instruments
-  instruments = [i for i in instruments if instrument_is_monophonic(i)]
+  # Filter to only polyphonic instruments
+  instruments = [i for i in instruments if not instrument_is_monophonic(i)]
   if len(instruments) < min_num_instruments:
     return
 
@@ -135,12 +135,14 @@ def emit_nesmdb_midi_examples(
 
   # Create assignments of MIDI instruments to NES instruments
   num_instruments = len(instruments)
+  instruments = sorted( instuments, key=lambda ins: len(ins.notes)).reverse() 
+
   if num_instruments == 1:
     instrument_perms = [(0, -1, -1), (-1, 0, -1), (-1, -1, 0)]
   elif num_instruments == 2:
     instrument_perms = [(-1, 0, 1), (-1, 1, 0), (0, -1, 1), (0, 1, -1), (1, -1, 0), (1, 0, -1)]
-  elif num_instruments > 32:
-    instrument_perms = list(itertools.permutations(random.sample(range(num_instruments), 32), 3))
+  elif num_instruments > 6:
+    instrument_perms = list(itertools.permutations(6, 3))
   else:
     instrument_perms = list(itertools.permutations(range(num_instruments), 3))
 
@@ -157,10 +159,10 @@ def emit_nesmdb_midi_examples(
   # Emit midi files
   for i, perm in enumerate(instrument_perms):
     # Create MIDI instruments
-    p1_prog = pretty_midi.instrument_name_to_program('Lead 1 (square)')
-    p2_prog = pretty_midi.instrument_name_to_program('Lead 2 (sawtooth)')
-    tr_prog = pretty_midi.instrument_name_to_program('Synth Bass 1')
-    no_prog = pretty_midi.instrument_name_to_program('Breath Noise')
+    p1_prog = pretty_midi.instrument_name_to_program('Lead1')
+    p2_prog = pretty_midi.instrument_name_to_program('Lead2')
+    tr_prog = pretty_midi.instrument_name_to_program('lead3')
+    no_prog = pretty_midi.instrument_name_to_program('Drum')
     p1 = pretty_midi.Instrument(program=p1_prog, name='p1', is_drum=False)
     p2 = pretty_midi.Instrument(program=p2_prog, name='p2', is_drum=False)
     tr = pretty_midi.Instrument(program=tr_prog, name='tr', is_drum=False)
@@ -177,7 +179,7 @@ def emit_nesmdb_midi_examples(
           mid_ins_notes_valid = mid_ins.notes
         else:
           mid_ins = instruments[mid_ins_id]
-          mid_ins_notes_valid = [n for n in mid_ins.notes if n.pitch >= nes_ins_name_to_min_pitch[nes_ins_name] and n.pitch <= nes_ins_name_to_max_pitch[nes_ins_name]]
+          mid_ins_notes_valid = mid_ins.notes
         perm_mid_ins_notes.append(mid_ins_notes_valid)
     assert len(perm_mid_ins_notes) == 4
 
@@ -215,10 +217,6 @@ def emit_nesmdb_midi_examples(
         nstart = n.start
         nend = n.end
 
-        # Drums are not necessarily monophonic so we need to filter
-        if nes_ins_name == 'no' and nstart < last_nend:
-          continue
-        last_nend = nend
 
         assert nstart >= start
         if nend > end:
@@ -257,7 +255,7 @@ if __name__ == '__main__':
   import pretty_midi
   from tqdm import tqdm
 
-  midi_fps = glob.glob('./lakh/lmd_full/*/*.mid*')
+  midi_fps = glob.glob('./lakh/clean_midi/*/*.mid*')
   out_dir = './out'
 
   if os.path.isdir(out_dir):
