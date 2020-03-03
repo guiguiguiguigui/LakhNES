@@ -5,3 +5,6 @@ __pycache__/*
 LakhNES-model/*
 LakhNES-synth/*
 Lakh400kPretrainOnly/*
+data/lakh/*
+data/out/*
+
