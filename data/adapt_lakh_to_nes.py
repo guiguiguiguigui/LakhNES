@@ -142,7 +142,7 @@ def emit_nesmdb_midi_examples(
   elif num_instruments == 2:
     instrument_perms = [(-1, 0, 1), (-1, 1, 0), (0, -1, 1), (0, 1, -1), (1, -1, 0), (1, 0, -1)]
   elif num_instruments > 6:
-    instrument_perms = list(itertools.permutations(6, 3))
+    instrument_perms = list(itertools.permutations(range(6), 3))
   else:
     instrument_perms = list(itertools.permutations(range(num_instruments), 3))
 
