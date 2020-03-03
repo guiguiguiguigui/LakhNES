@@ -135,7 +135,7 @@ def emit_nesmdb_midi_examples(
 
   # Create assignments of MIDI instruments to NES instruments
   num_instruments = len(instruments)
-  instruments = sorted( instuments, key=lambda ins: len(ins.notes)).reverse() 
+  instruments = sorted(instruments, key=lambda ins: len(ins.notes)).reverse() 
 
   if num_instruments == 1:
     instrument_perms = [(0, -1, -1), (-1, 0, -1), (-1, -1, 0)]
