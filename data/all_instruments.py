@@ -140,5 +140,5 @@ if __name__ == '__main__':
   def _task(x):
     all_instruments(x, out_dir)
 
-  with multiprocessing.Pool(8) as p:
+  with multiprocessing.Pool(4) as p:
     r = list(tqdm(p.imap(_task, midi_fps), total=len(midi_fps)))
